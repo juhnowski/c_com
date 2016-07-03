@@ -59,13 +59,13 @@ void set_blocking(int fd, int should_block) {
 
 int main(int argc, char **argv){
     
-    char *portname = "/dev/ttyS0";
+    char *portname = "/dev/ttyUSB0";
 
     int fd = open(portname, O_RDWR | O_NOCTTY | O_SYNC);
     
     if (fd < 0) {
 	fprintf(stderr, "error %d opening %s: %s", errno, portname, strerror(errno));
-	return;
+	return errno;
     }
 
     set_interface_attribs(fd, B115200, 0);
@@ -75,5 +75,6 @@ int main(int argc, char **argv){
     char buf[100];
     int n = read(fd, buf, sizeof buf);
     printf("%s",buf);
+    close(fd);
     return 0;
 }
